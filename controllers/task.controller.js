@@ -6,21 +6,21 @@ export const getTasksByUser = async (req, res, next) => {
         const page = parseInt(req.query.page) || 1;
         const pageSize = 4;
         const query = { owner: new ObjectId(req.params.id) };
-        const { status, orderBy } = req.query; // Извлекаем параметры сортировки и фильтрации
-        const sort = orderBy ? { [orderBy]: 1 } : {}; // Формируем объект сортировки
+        const { status, orderBy } = req.query; 
+        const sort = orderBy ? { [orderBy]: 1 } : {};
 
         if (status) {
-            query['status'] = status; // Добавляем фильтр по статусу, если он указан
+            query['status'] = status; 
         }
 
         const tasks = await collection
             .find(query)
-            .sort(sort) // Применяем сортировку
+            .sort(sort) 
             .limit(pageSize)
             .skip((page - 1) * pageSize)
             .toArray();
 
-        const taskCount = await collection.countDocuments(query); // Изменено с count на countDocuments
+        const taskCount = await collection.countDocuments(query); 
         res.status(200).json({ tasks, taskCount });
     } catch (error) {
         next({ status: 500, error });
